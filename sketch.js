@@ -36,7 +36,8 @@ function setup() {
   runButton.position(10, 30)
   runButton.mousePressed(Run)
 
-
+  background(220);
+  ShowCells()
   //Aldous(cells)
 
   
@@ -77,8 +78,8 @@ function ShowCells(){
 
 
 function draw() {
-  background(220);
-  ShowCells()
+
+  
   try{
     push()
     fill(0, 255, 0);

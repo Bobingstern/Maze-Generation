@@ -108,6 +108,7 @@ function MakeMazeDivide(a, b, c, d){
 //Aldous
 
 async function Aldous(maze){
+  ShowCells()
   let unvisited = []
   for (var i=0;i<maze.length;i++){
     for (var n=0;n<maze[i].length;n++){
@@ -123,6 +124,7 @@ async function Aldous(maze){
   while (unvisited.includes(0)){
     
     cells[chosen[0]][chosen[1]].visited = true
+    cells[chosen[0]][chosen[1]].show()
     unvisited[unvisited.indexOf(chosen)] = 1
     let surrounding = GetNeighbors(chosen)
     
@@ -134,21 +136,27 @@ async function Aldous(maze){
     if (!cells[r[0]][r[1]].visited){
 
       cells[r[0]][r[1]].obstacle = false
+      cells[r[0]][r[1]].show()
       if (x == 0){
         cells[r[0]-1][r[1]].obstacle = false
+        cells[r[0]-1][r[1]].show()
       }
       if (x == 1){
         cells[r[0]+1][r[1]].obstacle = false
+        cells[r[0]+1][r[1]].show()
       }
       if (x == 2){
         cells[r[0]][r[1]-1].obstacle = false
+        cells[r[0]][r[1]-1].show()
       }
       if (x == 3){
         cells[r[0]][r[1]+1].obstacle = false
+        cells[r[0]][r[1]+1].show()
       }
 
       
       chosen = r
+      cells[chosen[0]][chosen[1]].show()
     
     }
     else{
@@ -225,6 +233,7 @@ async function RecursiveBacktrackerMaze(){
   }
   //RecursiveBacktracker([1, 1])
   let backtrack = []
+  ShowCells()
   BacktrackRecurse([1, 1], backtrack)
 
 }
@@ -234,9 +243,10 @@ async function BacktrackRecurse(curr, back){
   let surrounding = GetNeighbors(curr)
   let possible = []
   let visited = []
-  await sleep(1)
+  await sleep(0.01)
 
   cells[curr[0]][curr[1]].visited = true
+  cells[curr[0]][curr[1]].show()
   for (var i=0;i<surrounding.length;i++){
     let re = surrounding[i]
     if (!cells[re[0]][re[1]].visited){
@@ -252,15 +262,20 @@ async function BacktrackRecurse(curr, back){
     cells[chosen[0]][chosen[1]].visited = true
     if (curr[0] < chosen[0]){
       cells[curr[0]+1][curr[1]].obstacle = false
+      cells[curr[0]+1][curr[1]].show()
+
     }
     else if (curr[0] > chosen[0]){
       cells[curr[0]-1][curr[1]].obstacle = false
+      cells[curr[0]-1][curr[1]].show()
     }
     else if (curr[1] < chosen[1]){
       cells[curr[0]][curr[1]+1].obstacle = false
+      cells[curr[0]][curr[1]+1].show()
     }
     else if (curr[1] > chosen[1]){
       cells[curr[0]][curr[1]-1].obstacle = false
+      cells[curr[0]][curr[1]-1].show()
     }
     //await sleep(1)
     back.push(chosen)
@@ -268,7 +283,7 @@ async function BacktrackRecurse(curr, back){
     if (chosen == [1, 1]){
       return
     }
-    BacktrackRecurse(chosen, back)
+    await BacktrackRecurse(chosen, back)
 
 
 
@@ -278,7 +293,7 @@ async function BacktrackRecurse(curr, back){
       let e = back[back.length-1]
       back.splice(back.length-1, 1)
       shw = cells[e[0]][e[1]]
-      BacktrackRecurse(e, back)
+      await BacktrackRecurse(e, back)
     }
     else{
       return

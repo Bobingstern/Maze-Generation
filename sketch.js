@@ -27,7 +27,8 @@ function setup() {
   selection.position(10, 10);
   selection.option('Aldous Broder');
   selection.option('Recursive Division')
-  selection.selected('Adlous Broder');
+  selection.option('Recursive Backtracker')
+  selection.selected('Recursive Backtracker');
 
   
 
@@ -51,6 +52,9 @@ function Run() {
     if (item == "Recursive Division"){
       MakeMazeDivide(h-1, 0, 0, w-1)
     }
+    if (item == "Recursive Backtracker"){
+      RecursiveBacktrackerMaze()
+    }
     
 
   }
@@ -66,39 +70,6 @@ function ShowCells(){
   }
 }
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function randomIntInSteps(a, b, step) {
-  function randomInt(a, b) {
-    return Math.floor(Math.random() * (b - a + 1) + a);
-  }
-
-  if (a > b) {
-    // Ensure a is smaller.
-    var c = a;
-    a = b;
-    b = c;
-  }
-
-  step = Math.abs(step)
-
-  return a + randomInt(0, Math.floor((b - a)/step)) * step;
-}
-
-
-
-function containsObject(obj, list) {
-    var i;
-    for (i = 0; i < list.length; i++) {
-        if (list[i] === obj) {
-            return [true, i];
-        }
-    }
-
-    return false;
-}
 
 
 

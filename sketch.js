@@ -55,6 +55,9 @@ function Run() {
     if (item == "Recursive Backtracker"){
       RecursiveBacktrackerMaze()
     }
+    if (item == "Prims Algorithm"){
+      Prims()
+    }
     
 
   }

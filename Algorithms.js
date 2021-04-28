@@ -200,13 +200,13 @@ function GetNeighbors(cell){
   if (cell[0] - 2 > -1){
     surrounding.push([cell[0]-2, cell[1]])
   }
-  if (cell[0] + 2 < cells.length-1){
+  if (cell[0] + 2 < cells.length){
     surrounding.push([cell[0]+2, cell[1]])
   }
   if (cell[1] - 2 > -1){
     surrounding.push([cell[0], cell[1]-2])
   }
-  if (cell[1] + 2 < cells[0].length-1){
+  if (cell[1] + 2 < cells[0].length){
 
     surrounding.push([cell[0], cell[1]+2])
 
@@ -223,7 +223,68 @@ async function RecursiveBacktrackerMaze(){
       
     }
   }
-  RecursiveBacktracker([1, 1])
+  //RecursiveBacktracker([1, 1])
+  let backtrack = []
+  BacktrackRecurse([1, 1], backtrack)
+
+}
+
+async function BacktrackRecurse(curr, back){
+
+  let surrounding = GetNeighbors(curr)
+  let possible = []
+  let visited = []
+  await sleep(1)
+
+  cells[curr[0]][curr[1]].visited = true
+  for (var i=0;i<surrounding.length;i++){
+    let re = surrounding[i]
+    if (!cells[re[0]][re[1]].visited){
+      possible.push(re)
+    }
+    else{
+      visited.push(re)
+    }
+  }
+  if (possible.length > 0){
+    let x = round(random(possible.length-1))
+    let chosen = possible[x]
+    cells[chosen[0]][chosen[1]].visited = true
+    if (curr[0] < chosen[0]){
+      cells[curr[0]+1][curr[1]].obstacle = false
+    }
+    else if (curr[0] > chosen[0]){
+      cells[curr[0]-1][curr[1]].obstacle = false
+    }
+    else if (curr[1] < chosen[1]){
+      cells[curr[0]][curr[1]+1].obstacle = false
+    }
+    else if (curr[1] > chosen[1]){
+      cells[curr[0]][curr[1]-1].obstacle = false
+    }
+    //await sleep(1)
+    back.push(chosen)
+    shw = cells[chosen[0]][chosen[1]]
+    if (chosen == [1, 1]){
+      return
+    }
+    BacktrackRecurse(chosen, back)
+
+
+
+  }
+  else{
+    if (back.length > 0){
+      let e = back[back.length-1]
+      back.splice(back.length-1, 1)
+      shw = cells[e[0]][e[1]]
+      BacktrackRecurse(e, back)
+    }
+    else{
+      return
+    }
+  }
+
 
 }
 
@@ -277,5 +338,12 @@ async function RecursiveBacktracker(c){
 
 } 
 
-//---
+//Prims
+
+
+async function Prims(){
+
+}
+
+
 

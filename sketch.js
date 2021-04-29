@@ -25,8 +25,6 @@ function setup() {
 
   selection = createSelect();
   selection.position(10, 10);
-  selection.option('Aldous Broder');
-  selection.option('Recursive Division')
   selection.option('Recursive Backtracker')
   selection.selected('Recursive Backtracker');
 

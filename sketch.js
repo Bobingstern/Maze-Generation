@@ -5,7 +5,9 @@ let end = []
 let e = 0
 let selection;
 let runButton;
+let solveButton
 let w, h
+let solved = false
 
 
 function setup() {
@@ -30,9 +32,13 @@ function setup() {
 
   
 
-  runButton = createButton("Start")
+  runButton = createButton("Make Maze")
   runButton.position(10, 30)
   runButton.mousePressed(Run)
+
+  solveButton = createButton("Solve")
+  solveButton.position(100, 30)
+  solveButton.mousePressed(Solve)
 
   background(220);
   ShowCells()
@@ -40,6 +46,9 @@ function setup() {
 
   
   
+}
+function Solve(){
+  SolveMaze([1, 1])
 }
 
 function Run() {
@@ -87,6 +96,16 @@ function draw() {
   catch{
 
   }
+  if (solved){
+    for (var i=0;i<solve.length;i++){
+      let re = solve[i]
+      let re1 = solve[i-1]
+      push()
+      fill(0, 255, 0)
+      rect(cells[re[0]][re[1]].pos.x, cells[re[0]][re[1]].pos.y, cellSize, cellSize)
+      pop()
+    }
+  }
 }
 
 
@@ -96,6 +115,8 @@ class Cell{
     this.obstacle = isOb
     this.visited = false
     this.expanded = false
+    this.solveVisited = false
+    
     this.ind = [a, b]
     this.f = dist(0, 0, this.pos.x, this.pos.y) + dist(this.pos.x, this.pos.y, floor(width/cellSize), floor(height/cellSize))
   }

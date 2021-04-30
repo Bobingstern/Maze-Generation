@@ -1,5 +1,108 @@
-//utils
-function sleep(ms) {
+//---
+let solve = []
+end = []
+
+class AstarCell{
+  constructor(x, y, end, ob){
+    this.pos = createVector(x, y)
+    this.obstacle = ob
+    this.visited = false
+    this.f = 0
+    this.g = 0
+    this.h = 0
+    this.parent = []
+    this.g = dist(x, y, end[0], end[1])
+    this.h = dist(x, y, 0, 0)
+    this.f = this.g+this.h
+
+  }
+  show(){
+    push()
+    fill(0, 255, 0);
+    rect(this.pos.x, this.pos.y, cellSize, cellSize)
+    pop()
+  }
+
+}
+
+async function SolveMaze(start){ 
+  let nodes = []
+  end = [cells[0].length-2, cells.length-2]
+  cells[end[1]][end[0]].obstacle = false
+  ShowCells()
+  for (var i=0;i<cells.length;i++){
+    let temp = []
+    for (var n=0;n<cells[0].length;n++){
+      temp.push(new AstarCell(n*cellSize, i*cellSize, end, cells[i][n].obstacle))
+    }
+    nodes.push(temp)
+  }
+
+
+  let open = [start]
+  let closed = []
+  let curr = []
+  while (open.length > 0){
+    
+    let best = 10000
+    let chosen = 0
+    for (var i=0;i<open.length;i++){
+      if (nodes[open[i][0]][open[i][1]].f < best){
+        best = nodes[open[i][0]][open[i][1]].f
+        curr = open[i]
+        chosen = i
+      }
+    }
+    open.splice(chosen, 1)
+    nodes[curr[0]][curr[1]].visited = true
+    let surrounding = GetNeighborsSingular(curr)
+    for (var i=0;i<surrounding.length;i++){
+      let re = surrounding[i]
+      if (!nodes[re[0]][re[1]].obstacle && !nodes[re[0]][re[1]].visited){
+        open.push(re)
+        nodes[re[0]][re[1]].parent = curr
+      }
+      
+    }
+    nodes[curr[0]][curr[1]].show()
+    if (curr[0] == end[1] && curr[1] == end[0]){
+      console.log('done')
+      break
+    }
+    await sleep(1)
+
+  }
+  let current = curr
+  ShowCells()
+  while (current[0] != start[0] || current[1] != start[1]){
+
+    nodes[current[0]][current[1]].show()
+    current = nodes[current[0]][current[1]].parent
+  }
+}
+
+
+function GetNeighborsSingular(cell){
+  let surrounding = []
+  if (cell[0] - 1 > -1){
+    surrounding.push([cell[0]-1, cell[1]])
+  }
+  if (cell[0] + 1 < cells.length){
+    surrounding.push([cell[0]+1, cell[1]])
+  }
+  if (cell[1] - 1 > -1){
+    surrounding.push([cell[0], cell[1]-1])
+  }
+  if (cell[1] + 1 < cells[0].length){
+
+    surrounding.push([cell[0], cell[1]+1])
+
+  }
+  return surrounding
+}
+
+
+async function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
@@ -228,6 +331,7 @@ async function RecursiveBacktrackerMaze(){
       if (i % 2 == 0 || n%2 == 0){
         cells[i][n].obstacle = true;
       }
+      cells[i][n].visited = false
       
     }
   }
@@ -243,7 +347,7 @@ async function BacktrackRecurse(curr, back){
   let surrounding = GetNeighbors(curr)
   let possible = []
   let visited = []
-  await sleep(0.01)
+  await sleep(1)
 
   cells[curr[0]][curr[1]].visited = true
   cells[curr[0]][curr[1]].show()
@@ -359,6 +463,3 @@ async function RecursiveBacktracker(c){
 async function Prims(){
 
 }
-
-
-

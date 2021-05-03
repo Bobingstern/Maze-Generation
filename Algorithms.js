@@ -18,7 +18,7 @@ class AstarCell{
   }
   show(){
     push()
-    fill(0, 255, 0);
+    fill(0, 255, 0, this.f/10);
     rect(this.pos.x, this.pos.y, cellSize, cellSize)
     pop()
   }
@@ -26,6 +26,7 @@ class AstarCell{
 }
 
 async function SolveMaze(start){ 
+  started = true
   let nodes = []
   end = [cells[0].length-2, cells.length-2]
   cells[end[1]][end[0]].obstacle = false
@@ -44,31 +45,51 @@ async function SolveMaze(start){
   let curr = []
   while (open.length > 0){
     
-    let best = 10000
-    let chosen = 0
+    let best = 0
+    let ch = 0
     for (var i=0;i<open.length;i++){
-      if (nodes[open[i][0]][open[i][1]].f < best){
-        best = nodes[open[i][0]][open[i][1]].f
+      let f = nodes[open[i][0]][open[i][1]].f
+      if (f > best){
+        best = f
+        ch = i
         curr = open[i]
-        chosen = i
       }
     }
-    open.splice(chosen, 1)
-    nodes[curr[0]][curr[1]].visited = true
-    let surrounding = GetNeighborsSingular(curr)
-    for (var i=0;i<surrounding.length;i++){
-      let re = surrounding[i]
-      if (!nodes[re[0]][re[1]].obstacle && !nodes[re[0]][re[1]].visited){
-        open.push(re)
-        nodes[re[0]][re[1]].parent = curr
-      }
-      
-    }
+    open.splice(ch, 1)
+
+
     nodes[curr[0]][curr[1]].show()
+    nodes[curr[0]][curr[1]].visited = true
+    var neighbors = GetNeighborsSingular(curr)
+    for (var i = 0, il = neighbors.length; i < il; ++i){
+      var neighbor = neighbors[i]
+      if (nodes[neighbor[0]][neighbor[1]].visited || nodes[neighbor[0]][neighbor[1]].obstacle){
+        continue
+      }
+
+      var gScore = nodes[curr[0]][curr[1]].g + (nodes[neighbor[0]][neighbor[1]].h + dist(curr[0], curr[1], neighbor[0], neighbor[1]))
+      var beenVisited = nodes[neighbor[0]][neighbor[1]].visited
+      if (!beenVisited){
+        nodes[neighbor[0]][neighbor[1]].parent = curr
+        nodes[neighbor[0]][neighbor[1]].visited = true
+        //nodes[neighbor[0]][neighbor[1]].g = gScore
+      
+
+      if (!beenVisited){
+        open.push(neighbor)
+      }
+    }
+
+    }
     if (curr[0] == end[1] && curr[1] == end[0]){
       console.log('done')
       break
     }
+
+
+
+
+    
     await sleep(1)
 
   }

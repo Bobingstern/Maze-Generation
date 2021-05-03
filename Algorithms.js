@@ -349,7 +349,7 @@ function GetNeighbors(cell){
 async function RecursiveBacktrackerMaze(){
   for (var i=0;i<cells.length;i++){
     for (var n=0;n<cells[i].length;n++){
-      if (i % 2 == 0 || n%2 == 0){
+      if (1==1){
         cells[i][n].obstacle = true;
       }
       cells[i][n].visited = false
@@ -385,21 +385,26 @@ async function BacktrackRecurse(curr, back){
     let x = round(random(possible.length-1))
     let chosen = possible[x]
     cells[chosen[0]][chosen[1]].visited = true
+    //cells[curr[0]][curr[1]].obstacle = false
     if (curr[0] < chosen[0]){
       cells[curr[0]+1][curr[1]].obstacle = false
+      cells[curr[0]+2][curr[1]].obstacle = false
       cells[curr[0]+1][curr[1]].show()
 
     }
     else if (curr[0] > chosen[0]){
       cells[curr[0]-1][curr[1]].obstacle = false
+      cells[curr[0]-2][curr[1]].obstacle = false
       cells[curr[0]-1][curr[1]].show()
     }
     else if (curr[1] < chosen[1]){
       cells[curr[0]][curr[1]+1].obstacle = false
+      cells[curr[0]][curr[1]+2].obstacle = false
       cells[curr[0]][curr[1]+1].show()
     }
     else if (curr[1] > chosen[1]){
       cells[curr[0]][curr[1]-1].obstacle = false
+      cells[curr[0]][curr[1]-2].obstacle = false
       cells[curr[0]][curr[1]-1].show()
     }
     //await sleep(1)

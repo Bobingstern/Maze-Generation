@@ -8,6 +8,7 @@ let runButton;
 let solveButton
 let w, h
 let solved = false
+let started = false
 
 
 function setup() {
@@ -20,6 +21,9 @@ function setup() {
     let temp = []
     for (let x=0;x<w;x++){
       temp.push(new Cell(x*cellSize, y*cellSize, false, cells.length, temp.length))
+      if (random(100) < 30){
+        //temp[temp.length-1].obstacle = true
+      }
     }
     cells.push(temp)
   }
@@ -52,6 +56,7 @@ function Solve(){
 }
 
 function Run() {
+  started = true
   let item = selection.value();
   if (true){
     if (item == "Aldous Broder"){
@@ -81,12 +86,24 @@ function ShowCells(){
   }
 }
 
+function mouseDragged(){
+  if (!started){
 
+    let x = round(mouseX / cellSize)*cellSize
+    let y = round(mouseY / cellSize)*cellSize
+    //rect(x, y, cellSize, cellSize)
+
+    cells[round(y/cellSize)][round(x/cellSize)].obstacle = true
+  }
+}
 
 
 function draw() {
 
-  
+  if (!started){
+    ShowCells()
+
+  }
   try{
     push()
     fill(0, 255, 0);

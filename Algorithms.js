@@ -18,7 +18,7 @@ class AstarCell{
   }
   show(){
     push()
-    fill(0, 255, 0, this.f/10);
+    fill(0, 255, 0, this.f/cellSize);
     rect(this.pos.x, this.pos.y, cellSize, cellSize)
     pop()
   }

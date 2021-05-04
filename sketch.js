@@ -32,6 +32,8 @@ function setup() {
   selection = createSelect();
   selection.position(10, 10);
   selection.option('Recursive Backtracker')
+  selection.option('Recursive Division')
+  
   selection.selected('Recursive Backtracker');
 
   

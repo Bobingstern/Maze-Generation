@@ -167,38 +167,55 @@ async function RecursiveDivision(maze, top, bottom, left, right){
   let start_range = bottom + 2
   let end_range = top - 1
   let y = randomIntInSteps(start_range, end_range, 2)
+  //1, 5
+  //3
+  y = round((start_range+end_range)/2)
+  if (y%2!=0){
+    y-=1
+  }
   for (var i=left+1;i<right+1;i++){
     maze[y][i].obstacle = true
-    //await sleep(0.1)
+    maze[y][i].show()
+    await sleep(0.1)
   }
   
   start_range = left + 2
   end_range = right - 1
+
   let x = randomIntInSteps(start_range, end_range, 2)
+  x = round((start_range+end_range)/2)
+  if (x%2!=0){
+    x-=1
+  }
   for (var i=bottom+1;i<top+1;i++){
     maze[i][x].obstacle = true
-    //await sleep(0.1)
+    maze[i][x].show()
+    await sleep(0.1)
   }
-  await sleep(0.1)
+  // await sleep(1000)
   
   
   let wall = round(random(0, 4))
   if (wall != 0){
     let gap = randomIntInSteps(left+1, x, 2)
     maze[y][gap].obstacle = false
+    maze[y][gap].show()
   }
   if (wall != 1){
     let gap = randomIntInSteps(x+1, right, 2)
     maze[y][gap].obstacle = false
+    maze[y][gap].show()
   }
   
   if (wall != 2){
     let gap = randomIntInSteps(bottom+1, y, 2)
     maze[gap][x].obstacle = false
+    maze[gap][x].show()
   }
   if (wall != 3){
     let gap = randomIntInSteps(y+1, top, 2)
     maze[gap][x].obstacle = false
+    maze[gap][x].show()
   }
   
   if (top > y + 3 && x > left + 3){
@@ -226,6 +243,7 @@ function MakeMazeDivide(a, b, c, d){
       cells[0][column].obstacle = true
       cells[cells.length - 1][column].obstacle = true
   }
+  ShowCells()
   RecursiveDivision(cells, a, b, c, d)
 }
 
